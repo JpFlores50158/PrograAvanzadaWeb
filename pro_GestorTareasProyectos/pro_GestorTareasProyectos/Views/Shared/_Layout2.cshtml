@@ -1,0 +1,33 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="~/css/Estilos.css" asp-append-version="true" />
+</head>
+<body class="antialiased">
+    <div class="flex flex-col min-h-[100vh]">
+        <header class="bg-primary text-primary-foreground py-4 px-6 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <a class=" flex items-center gap-2" href="@Url.Action("Index","Home")">
+                    <span class="text-xl font-bold">Task Flow</span>
+                </a>
+            </div>
+            <nav class="flex items-center gap-4">
+                <a href="@Url.Action("VerProyectos","Proyecto")" class="text-sm font-medium hover:underline underline-offset-4">Proyectos</a>
+            </nav>
+        </header>
+        <main class="flex-1">
+            <section class="w-full pt-11 pb-11 bg-background" style="display: flex; justify-content: center;">
+                @RenderBody()
+            </section>            
+        </main>
+        <footer class="bg-primary text-primary-foreground py-6 text-center">
+            <p>&copy; 2024 Task Manager. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>

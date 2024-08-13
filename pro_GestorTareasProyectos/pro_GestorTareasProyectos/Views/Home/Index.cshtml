@@ -1,0 +1,24 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<main class="flex-1">
+    <section class="w-full pt-11 pb-11 bg-background" style="display: flex; justify-content: center;">
+        <div class="container grid items-center justify-center gap-4 px-4 text-center md:px-6 lg:gap-10">
+            <div class="space-y-3">
+                <h2 class="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Bienvenido a Task Flow</h2>
+                <p class="mx-auto max-w-[700px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">Gestiona tus tareas y proyectos con facilidad</p>
+            </div>
+            <div class="grid grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
+                <img src="https://images.pexels.com/photos/416405/pexels-photo-416405.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" width="300" height="200" alt="Task Manager" class="aspect-[3/2] overflow-hidden rounded-lg object-cover object-center" />
+                <img src="https://images.pexels.com/photos/372787/pexels-photo-372787.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" width="300" height="200" alt="Task Manager" class="aspect-[3/2] overflow-hidden rounded-lg object-cover object-center" />
+                <img src="https://images.pexels.com/photos/3183153/pexels-photo-3183153.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" width="300" height="200" alt="Task Manager" class="aspect-[3/2] overflow-hidden rounded-lg object-cover object-center" />
+            </div>
+            <div class="flex justify-center space-x-4">
+                <a class="inline-flex h-10 items-center justify-center rounded-md bg-primary px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover-bg-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2" href="@Url.Action("LogIn","Usuario")"> Log In </a>                
+                <a class="inline-flex h-10 items-center justify-center rounded-md border border-input bg-secondary px-8 text-sm font-medium text-secondary-foreground shadow-sm transition-colors hover-accent-foregroundfocus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2" href="@Url.Action("Register","Usuario")"> Register </a>
+            </div>
+        </div>
+    </section>
+</main>
+
