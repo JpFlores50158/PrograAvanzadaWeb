@@ -1,0 +1,57 @@
+﻿@model Usuario
+
+@{
+    ViewData["Title"] = "Log In";
+    Layout = "_Layout2";
+
+}
+
+<section class="pt-5 pb-5 bg-light d-flex justify-content-center">
+    <div class="container d-flex align-items-center justify-content-center" style="max-width: 1120px;">
+        <div class="row g-5">
+            <!-- Image Column -->
+            <div class="col-md-6 d-flex align-items-center justify-content-center">
+                <img src="https://images.pexels.com/photos/7376/startup-photos.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Imagen de login" class="img-fluid" />
+            </div>
+
+            <!-- Form Column -->
+            <div class="col-md-6">
+                <div class="bg-white shadow rounded-lg p-4">
+                    <div class="mb-4">
+                        <h2 class="h3 mb-2">Iniciar Sesión</h2>
+                        <p class="text-muted">
+                            Ingresa tus credenciales para acceder a tu cuenta
+                        </p>
+                    </div>
+
+                    @if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger">
+                            <strong>Error:</strong> @TempData["ErrorMessage"]
+                        </div>
+                    }
+
+                    <form asp-action="InicioSesion" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="CorreoElectronico" class="form-label"></label>
+                            <input asp-for="CorreoElectronico" class="form-control" />
+                            <span asp-validation-for="CorreoElectronico" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Contrasena" class="form-label"></label>
+                            <input asp-for="Contrasena" class="form-control" type="password" />
+                            <span asp-validation-for="Contrasena" class="text-danger"></span>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Login</button>
+                    </form>
+
+                    <a class="d-block text-center mt-3 btn btn-secondary" href="@Url.Action("Registro","Login")">Register</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -22,12 +22,12 @@ namespace pro_GestorTareasProyectos.Models
 
             modelBuilder.Entity<Usuario>(entity =>
             {
-                entity.HasKey(e => e.ID);
+                entity.HasKey(e => e.Id);
                 entity.Property(e => e.Nombre).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.CorreoElectronico).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.Contrasena).IsRequired().HasMaxLength(256);
 
-                
+
             });
 
             modelBuilder.Entity<Rol>(entity =>
@@ -36,7 +36,7 @@ namespace pro_GestorTareasProyectos.Models
                 entity.Property(e => e.Nombre).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.Descripcion).HasMaxLength(255);
 
-                
+
             });
 
             modelBuilder.Entity<Proyecto>(entity =>
@@ -45,7 +45,7 @@ namespace pro_GestorTareasProyectos.Models
                 entity.Property(e => e.Nombre).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.Descripcion).HasMaxLength(255);
 
-              
+
             });
 
             modelBuilder.Entity<Tarea>(entity =>
@@ -65,11 +65,11 @@ namespace pro_GestorTareasProyectos.Models
                 entity.HasOne(e => e.Tarea)
                       .WithMany(t => t.Comentarios)
                       .HasForeignKey(e => e.TareaID)
-                      .OnDelete(DeleteBehavior.Restrict);  
+                      .OnDelete(DeleteBehavior.Restrict);
                 entity.HasOne(e => e.Usuario)
                       .WithMany(u => u.Comentarios)
                       .HasForeignKey(e => e.UsuarioID)
-                      .OnDelete(DeleteBehavior.Restrict);  
+                      .OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<UsuarioEnProyecto>(entity =>

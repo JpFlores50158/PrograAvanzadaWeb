@@ -1,51 +1,67 @@
 ﻿@{
-    ViewData["Title"] = "Index";
-    Layout = "_Layout2";
+    ViewData["Title"] = "Home Page";
+
+
 }
 
-<head>
-    <style>
-        .feature {
-            background-color: #f9f9f9;
-            padding: 20px;
-            border-radius: 4px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            width: 300px;
-        }
+<main class="flex-grow-1">
 
-            .feature h2 {
-                font-size: 1.5em; margin-bottom: 15px;
-            }
-
-            .feature p {
-                font-size: 1em;
-                margin-bottom: 20px;
-            }
-
-    </style>
-</head>
-<body>
-    <main>
-        <section class="hero" style="padding: 38px 20px; text-align: center;">
-            <h1 style="font-size: 2.5em; margin-bottom: 20px;">Organiza tus proyectos, créalos de inmediato</h1>
+    <section class="hero text-center py-5">
+        <div class="mb-4">
+            <h2 class="display-4 font-weight-bold">Bienvenido </h2>
             <p style="font-size: 1.2em; margin-bottom: 30px;">Manténgase al tanto de sus tareas personales y profesionales con nuestra intuitiva herramienta de gestión de tareas</p>
-            <a style="margin-right: 15px" class="inline-flex h-10 items-center justify-center rounded-md bg-primary px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover-bg-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2" href="@Url.Action("CrearProyecto", "Proyecto")"> Crear Proyecto </a>
-            <a class="inline-flex h-10 items-center justify-center rounded-md border border-input bg-secondary px-8 text-sm font-medium text-secondary-foreground shadow-sm transition-colors hover-accent-foregroundfocus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2" href="@Url.Action("VerProyectos", "Proyecto")"> Ver Proyectos </a>
-        </section>
-        <section class="features" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 60px; padding: 40px 20px; background-color: lightgrey">
-            <div class="feature">
-                <h2>Task Management</h2>
-                <p>Easily create, organize, and track your tasks. Set due dates, assign priorities, and mark tasks as complete.</p>
+        </div>
+
+        <a class="btn btn-success btn-lg mr-2" href="@Url.Action("CrearProyecto", "Proyecto")">Crear Proyecto</a>
+        <a class="btn btn-secondary btn-lg" href="@Url.Action("VerProyectos", "Proyecto")">Ver Proyectos</a>
+    </section>
+    <div class="container d-flex flex-column align-items-center text-center px-4">
+
+        <div class="row g-4">
+            <div class="col-12 col-md-4">
+                <img src="https://images.pexels.com/photos/416405/pexels-photo-416405.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" class="img-fluid rounded" alt="Task Manager">
             </div>
-            <div class="feature">
-                <h2>Project Management</h2>
-                <p>Group related tasks into projects to stay organized and focused. Collaborate with team members and track project progress.</p>
+            <div class="col-12 col-md-4">
+                <img src="https://images.pexels.com/photos/372787/pexels-photo-372787.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" class="img-fluid rounded" alt="Task Manager">
             </div>
-            <div class="feature">
-                <h2>Reporting and Analytics</h2>
-                <p>Track your productivity and progress with detailed reports and analytics.</p>
+            <div class="col-12 col-md-4">
+                <img src="https://images.pexels.com/photos/3183153/pexels-photo-3183153.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" class="img-fluid rounded" alt="Task Manager">
             </div>
-        </section>
-    </main>
-</body>
+        </div>
+
+    </div>
+    <section class="features py-5 bg-light">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm border-0 rounded">
+                        <div class="card-body">
+                            <h5 class="card-title mb-3">Task Management</h5>
+                            <p class="card-text">Easily create, organize, and track your tasks. Set due dates, assign priorities, and mark tasks as complete.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm border-0 rounded">
+                        <div class="card-body">
+                            <h5 class="card-title mb-3">Project Management</h5>
+                            <p class="card-text">Group related tasks into projects to stay organized and focused. Collaborate with team members and track project progress.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm border-0 rounded">
+                        <div class="card-body">
+                            <h5 class="card-title mb-3">Reporting and Analytics</h5>
+                            <p class="card-text">Track your productivity and progress with detailed reports and analytics.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+</main>

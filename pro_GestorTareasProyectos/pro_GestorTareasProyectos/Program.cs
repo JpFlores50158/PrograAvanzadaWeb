@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using pro_GestorTareasProyectos.Models;
+using pro_GestorTareasProyectos.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<GTPContext>(op =>
 op.UseSqlServer(builder.Configuration.GetConnectionString("GTP")));
+
+builder.Services.AddScoped<ILoginService, LoginService>();
 
 var app = builder.Build();
 
@@ -27,6 +30,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Login}/{action=InicioSesion}/{id?}");
 
 app.Run();

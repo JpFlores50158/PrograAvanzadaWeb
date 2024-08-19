@@ -1,0 +1,58 @@
+﻿@model pro_GestorTareasProyectos.Models.Usuario
+
+@{
+    ViewData["Title"] = "Registrar";
+    Layout = "_Layout2";
+}
+
+<section class="pt-5 pb-5 bg-light d-flex justify-content-center">
+    <div class="container" style="max-width: 1120px;">
+        <div class="row g-5">
+            <!-- Form Column -->
+            <div class="col-md-6 d-flex align-items-center">
+                <div class="bg-white shadow rounded p-4 w-100">
+                    <h2 class="h3 mb-3">Registrar</h2>
+                    <p class="text-muted mb-4">
+                        Registrar una nueva cuenta con su información
+                    </p>
+
+                    @if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger">
+                            <strong>Error:</strong> @TempData["ErrorMessage"]
+                        </div>
+                    }
+
+                    <form asp-action="Registro" method="post">
+                        <div class="mb-3">
+                            <label asp-for="Nombre" class="form-label"></label>
+                            <input asp-for="Nombre" class="form-control" />
+                            <span asp-validation-for="Nombre" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="CorreoElectronico" class="form-label"></label>
+                            <input asp-for="CorreoElectronico" class="form-control" />
+                            <span asp-validation-for="CorreoElectronico" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="Contrasena" class="form-label"></label>
+                            <input asp-for="Contrasena" type="password" class="form-control" />
+                            <span asp-validation-for="Contrasena" class="text-danger"></span>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">
+                            Registrar
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Image Column -->
+            <div class="col-md-6 d-flex align-items-center justify-content-center">
+                <img src="https://images.pexels.com/photos/7376/startup-photos.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Imagen de registro" class="img-fluid" />
+            </div>
+        </div>
+    </div>
+</section>
