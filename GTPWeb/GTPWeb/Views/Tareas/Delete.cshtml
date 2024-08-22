@@ -1,0 +1,56 @@
+﻿@model GTPWeb.Models.Tarea
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<div class="container mt-4">
+    <h1 class="text-danger">Delete Task</h1>
+
+    <h3 class="text-warning">Seguro que quiere eliminar la tarea?(se eliminaran todo los comentarios relacionados con esta tarea)</h3>
+
+    <div class="card mt-4">
+        <div class="card-header bg-danger text-white">
+            <h4 class="mb-0">Task Details</h4>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Title</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Titulo)</dd>
+
+                <dt class="col-sm-3">Description</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Descripcion)</dd>
+
+                <dt class="col-sm-3">Due Date</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.FechaVencimiento)</dd>
+
+                <dt class="col-sm-3">Priority</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Prioridad)</dd>
+
+                <dt class="col-sm-3">Category</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Categoria)</dd>
+
+                <dt class="col-sm-3">Status</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Estado)</dd>
+
+                <dt class="col-sm-3">Project</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Proyecto.Nombre)</dd>
+
+                <dt class="col-sm-3">Assigned User</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.UsuarioEnProyecto.Usuario.Nombre)</dd>
+            </dl>
+        </div>
+        <div class="card-footer text-end">
+            <form asp-action="Delete" class="d-inline">
+                <input type="hidden" asp-for="ID" />
+                <input type="hidden" asp-for="ProyectoID" /> <!-- Campo oculto para ProyectoID -->
+                <button type="submit" class="btn btn-danger">
+                    <i class="bi bi-trash"></i> Delete
+                </button>
+            </form>
+            <a asp-action="Index" asp-route-id="@Model.ProyectoID" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Back to List
+            </a>
+        </div>
+    </div>
+</div>

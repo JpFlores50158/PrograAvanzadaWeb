@@ -1,0 +1,136 @@
+﻿@model IEnumerable<GTPWeb.Models.Proyecto>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .task {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            padding: 20px;
+        }
+
+        .task-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .task-description {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .task-due {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .task-due-icon {
+            margin-right: 5px;
+        }
+
+        .task-progress {
+            height: 8px;
+            background-color: #eee;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .task-progress-bar {
+            height: 100%;
+            background-color: #4CAF50;
+        }
+
+        .task-actions {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+            .task-actions span {
+                color: green;
+                margin-right: 25px;
+                font-weight: bold;
+            }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+            .header h1 {
+                margin: 0;
+            }
+
+        .add-task {
+            margin-left: 20px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        .no-projects-message {
+            font-size: 1.2em;
+            color: #999;
+            text-align: center;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h2 class="text-2xl font-bold tracking-tighter">Mis Proyectos</h2>
+
+            <a class="btn add-task" asp-action="Create">Create New</a>
+        </div>
+
+        @if (Model == null || !Model.Any())
+        {
+            <div class="no-projects-message">
+                <p>No tienes proyectos.</p>
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                @foreach (var item in Model)
+                {
+                    <div class="col-md-12">
+                        @await Html.PartialAsync("_CardProyectos", item)
+                    </div>
+                }
+            </div>
+           
+
+        }
+
+    </div>
+
+</body>
+</html>

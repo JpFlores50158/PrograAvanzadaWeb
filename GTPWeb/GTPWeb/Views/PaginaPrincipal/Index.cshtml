@@ -1,0 +1,67 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+
+
+}
+
+<main class="flex-grow-1">
+
+    <section class="hero text-center py-5">
+        <div class="mb-4">
+            <h2 class="display-4 font-weight-bold">Bienvenido </h2>
+            <p style="font-size: 1.2em; margin-bottom: 30px;">Manténgase al tanto de sus tareas personales y profesionales con nuestra intuitiva herramienta de gestión de tareas</p>
+        </div>
+
+        <a class="btn btn-success btn-lg mr-2" href="@Url.Action("Create", "Proyectos")">Crear Proyecto</a>
+        <a class="btn btn-secondary btn-lg" href="@Url.Action("Index", "Proyectos")">Ver Proyectos</a>
+    </section>
+    <div class="container d-flex flex-column align-items-center text-center px-4">
+
+        <div class="row g-4">
+            <div class="col-12 col-md-4">
+                <img src="https://images.pexels.com/photos/416405/pexels-photo-416405.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" class="img-fluid rounded" alt="Task Manager">
+            </div>
+            <div class="col-12 col-md-4">
+                <img src="https://images.pexels.com/photos/372787/pexels-photo-372787.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" class="img-fluid rounded" alt="Task Manager">
+            </div>
+            <div class="col-12 col-md-4">
+                <img src="https://images.pexels.com/photos/3183153/pexels-photo-3183153.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" class="img-fluid rounded" alt="Task Manager">
+            </div>
+        </div>
+
+    </div>
+    <section class="features py-5 bg-light">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm border-0 rounded">
+                        <div class="card-body">
+                            <h5 class="card-title mb-3">Task Management</h5>
+                            <p class="card-text">Easily create, organize, and track your tasks. Set due dates, assign priorities, and mark tasks as complete.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm border-0 rounded">
+                        <div class="card-body">
+                            <h5 class="card-title mb-3">Project Management</h5>
+                            <p class="card-text">Group related tasks into projects to stay organized and focused. Collaborate with team members and track project progress.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm border-0 rounded">
+                        <div class="card-body">
+                            <h5 class="card-title mb-3">Reporting and Analytics</h5>
+                            <p class="card-text">Track your productivity and progress with detailed reports and analytics.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+</main>

@@ -1,0 +1,52 @@
+﻿@model GTPWeb.Models.Comentario
+
+@{
+    ViewData["Title"] = "Create";
+    var tareaId = ViewData["TareaID"] as int?;
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4">Create Comentario</h1>
+
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Nuevo Comentario</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+
+                    <input type="hidden" asp-for="TareaID" value="@tareaId" />
+
+
+
+                    
+                    <input type="hidden" asp-for="UsuarioID" value='@Context.Session.GetInt32("UserId")' />
+
+
+                <div class="mb-3">
+                    <label asp-for="Mensaje" class="form-label"></label>
+                    <textarea asp-for="Mensaje" class="form-control"></textarea>
+                    <span asp-validation-for="Mensaje" class="text-danger"></span>
+                </div>
+
+                
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-success">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

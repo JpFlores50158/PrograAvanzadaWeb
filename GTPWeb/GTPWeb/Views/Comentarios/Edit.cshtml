@@ -1,0 +1,48 @@
+﻿@model GTPWeb.Models.Comentario
+
+@{
+    ViewData["Title"] = "Edit Comentario";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4">Edit Comentario</h1>
+
+    <div class="card">
+        <div class="card-header bg-warning text-white">
+            <h4 class="mb-0">Modificar Comentario</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                <input type="hidden" asp-for="ID" />
+                <input type="hidden" asp-for="FechaCreacion" class="form-control" readonly />
+                <input type="hidden" asp-for="TareaID" class="form-control" />
+                <input type="hidden" asp-for="UsuarioID" class="form-control" />
+               
+
+                <div class="mb-3">
+                    <label asp-for="Mensaje" class="form-label"></label>
+                    <textarea asp-for="Mensaje" class="form-control"></textarea>
+                    <span asp-validation-for="Mensaje" class="text-danger"></span>
+                </div>
+
+              
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-success">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

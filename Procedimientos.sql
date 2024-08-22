@@ -56,3 +56,33 @@ BEGIN
 END
 GO
 
+
+
+
+USE [GTP]
+GO
+
+INSERT INTO [dbo].[Roles]
+           ([Nombre]
+           ,[Descripcion])
+     VALUES
+           ('Admin'
+           ,'Administrador o Creador del proyecto')
+GO
+
+
+INSERT INTO [dbo].[Roles]
+           ([Nombre]
+           ,[Descripcion])
+     VALUES
+           ('CoAdmin'
+           ,'Adminstrador pero no creador')
+GO
+
+INSERT INTO [dbo].[Roles]
+           ([Nombre]
+           ,[Descripcion])
+     VALUES
+           ('Usuario'
+           ,'Usuario del proyecto')
+GO

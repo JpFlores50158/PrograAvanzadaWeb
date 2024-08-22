@@ -1,0 +1,335 @@
+﻿@model IEnumerable<GTPWeb.Models.Tarea>
+@inject GTPWeb.Services.IProyectoService _proyectoService
+@inject GTPWeb.Services.IUsuariosPService _usuarioPService
+@inject GTPWeb.Services.IComentarioService _comentarioService
+@inject GTPWeb.Services.IRolesService _rolesService
+
+@functions {
+    string NombreEmail(string Nombre, string correo)
+    {
+        string nombreEmail = Nombre + "  (" + correo + ")";
+        return nombreEmail;
+    }
+}
+
+@{
+    var proyectoId = ViewData["idProyecto"] as int?;
+}
+
+<style>
+    .dashboard-container {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+    }
+
+    .tasks-section, .team-section {
+        background-color: #fff;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        width: 48%;
+    }
+
+        .tasks-section h2, .team-section h2 {
+            margin-bottom: 20px;
+        }
+
+    .task-priority-bajo,
+    .task-priority-medio,
+    .task-priority-alto,
+    .task-priority-muyalto {
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: bold;
+        text-align: center;
+        text-transform: capitalize;
+    }
+
+    .task-priority-bajo {
+        background-color: #d4edda;
+        color: #155724;
+    }
+
+    .task-priority-medio {
+        background-color: #fff3cd;
+        color: #856404;
+    }
+
+    .task-priority-alto {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+
+    .task-priority-muyalto {
+        background-color: #f5c6cb;
+        color: #721c24;
+    }
+
+    .status {
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: bold;
+        text-align: center;
+        width: 100%;
+        display:flex;
+        align-items: center;
+        justify-content:center;
+    }
+
+        .status.completada {
+            background-color: #4caf50;
+            color: #fff;
+            border-color: #388e3c;
+             
+        }
+
+        .status.pendiente {
+            background-color: #ffeb3b;
+            color: #000;
+            border-color: #fbc02d;
+           
+        }
+
+        .status.en-proceso {
+            background-color: #ff5722;
+            color: #fff;
+            border-color: #e64a19;
+           
+        }
+
+    .due-date {
+        font-size: 15px;
+        color: #777;
+    }
+
+    .add-task-button, .add-member-button {
+        display: inline-block;
+        margin-top: 10px;
+       
+        background-color: #333;
+        color: #fff;
+        border-radius: 5px;
+        text-decoration: none;
+    }
+
+    .categoria-tipo{
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: bold;
+        text-align: center;
+        text-transform: capitalize;
+        background-color: #f3f3f3;
+
+    }
+</style>
+
+<body style="background-color: #f0f0f0;">
+    <div class="container my-4">
+        
+        <main>
+            <h2 class="p-3 bg-white rounded shadow-sm mb-4">Proyecto: @_proyectoService.NombreProyecto(Convert.ToInt32(ViewData["idProyecto"]))</h2>
+            <div class="dashboard-container">
+                <!-- Tasks Section -->
+                <div class="tasks-section">
+                    <div style="display:flex;justify-content:space-between;align-items:center;">
+                        <h2>Tasks</h2>   
+                        <div style="align-items:center;">
+                            <a href="@Url.Action("Create", new { id = ViewData["idProyecto"] })" class="btn text-white add-task-button mt-0">Add Task</a>
+                            <a asp-action="Interactiva" class="btn btn-primary " asp-route-id="@proyectoId">Interactiva </a>
+                        </div>
+                        
+                    </div>
+                    
+                    @foreach (var tarea in Model)
+                    {
+                        <div class="card my-2">
+                            <div class="card-header">
+                                @{
+                                    var prioridadClass = tarea.Prioridad switch
+                                    {
+                                        "Bajo" => "task-priority-bajo",
+                                        "Medio" => "task-priority-medio",
+                                        "Alto" => "task-priority-alto",
+                                        "Muy Alto" => "task-priority-muyalto",
+                                        _ => "task-priority-bajo"
+                                    };
+                                }
+                                <div class="row">
+                                    <div class="col-7">
+                                        <h5>@tarea.Titulo</h5>
+                                    </div>
+                                    <div class="col-5"style="display:flex;justify-content:end">
+                                         <span class="categoria-tipo"> @tarea.Categoria</span>
+                                        <span class="@prioridadClass "> @tarea.Prioridad</span>
+                                    </div>
+                                </div>
+                               
+                            </div>
+                            <div class="card-body p-2">
+                                <div class="row">
+                                    <div class="col-9 ">
+                                       
+                                        <p>@tarea.Descripcion</p>
+                                        <p class="m-0">Aisgnado a: @_usuarioPService.ListaUsuariosPUsuario(tarea.UsuarioEnProyecto.UsuarioID).Usuario.Nombre</p>
+                                    </div>
+                                    <div class="col-3 align-content-center justify-content-center">
+                                        <span class="status @(tarea.Estado.ToLower().Replace(" ", "-"))">
+                                            @tarea.Estado
+                                        </span>
+                                       <div style="display:flex;justify-content:space-between" class="mt-1">
+                                            @if (_rolesService.RolUsuario(Context.Session.GetInt32("UserId")).Rol.Nombre == "CoAdmin" || _rolesService.RolUsuario(Context.Session.GetInt32("UserId")).Rol.Nombre == "Admin")
+                                            {
+                                                <a href="@Url.Action("Edit", new { id = tarea.ID })" class=" text-primary "><i class="fas fa-edit"></i></a>
+
+                                                <a href="@Url.Action("Delete", new { id = tarea.ID })" class=" text-danger "><i class="fas fa-trash"></i></a>
+
+                                            }
+                                            <a href="@Url.Action("Details", new { id = tarea.ID })" class=" text-secondary  "><i class="fas fa-info"></i></a>
+                                       </div>
+                                    </div>
+
+                                   
+                                </div>
+                                <hr />
+                                <div style="display: flex; justify-content: space-between; align-content: end;" class="">
+                                    
+                                    <div class="due-date" style="justify-content:start">
+                                        @if (tarea.FechaVencimiento.HasValue)
+                                        {
+                                            <span>@tarea.FechaVencimiento.Value.ToString("MMMM dd, yyyy")</span>
+                                        }
+                                        else
+                                        {
+                                            <span>No Due Date</span>
+                                        }
+                                    </div>
+                                    <div>
+                                        <a class="text-success" style="font-weight: 100%" asp-action="Create" asp-controller="Comentarios" asp-route-id="@tarea.ID">
+                                            <i class="fas fa-comment"></i>
+                                        </a>
+                                        @if (_comentarioService.ListaComentarios(tarea.ID).Count() != 0)
+
+                                        {
+                                            <a class="text-success ml-2 toggle-comments" style="font-weight: 100%" data-target="#comments-@tarea.ID">
+                                                <i class="fas fa-angle-down"></i>
+                                            </a>
+                                        }
+                                    </div>
+                                   
+                                </div>
+                            </div>
+                        </div>
+                        <div id="comments-@tarea.ID" class="ml-5 mr-3 mb-2" style="display: none;">
+                            @foreach (var comentario in _comentarioService.ListaComentarios(tarea.ID))
+                            {
+                                <div class="card" style="background-color: #f3f3f3;">
+                                    <div class="card-body pb-1">
+                                        <div class="row">
+                                            <div class="col-11">
+                                                <h5>@comentario.Usuario.Nombre:</h5>
+                                                <p class="card-text pl-4 rounded" >@comentario.Mensaje</p>
+                                                <span style="font-size: 12px; display: flex; justify-content: end; align-items: end;" class="text-muted">@comentario.FechaCreacion</span>
+                                            </div>
+                                            <div class="col-1" style="display: flex; justify-content: center; flex-wrap: wrap; align-items: center;">
+
+                                                @if (_rolesService.RolUsuario(Context.Session.GetInt32("UserId")).Rol.Nombre == "CoAdmin" || _rolesService.RolUsuario(Context.Session.GetInt32("UserId")).Rol.Nombre == "Admin" || comentario.Usuario.Id == Context.Session.GetInt32("UserId"))
+                                                {
+                                                    <a asp-action="Edit" class="text-primary" asp-controller="Comentarios" asp-route-id="@comentario.ID">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <a asp-action="Delete" class="text-danger mt-1" asp-controller="Comentarios" asp-route-id="@comentario.ID">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>
+
+                                                }
+                                               
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                  
+                </div>
+
+                <!-- Team Members Section -->
+                <div class="team-section">
+                    <h2>Team Members</h2>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Usuario</th>
+                                <th>Rol</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in _usuarioPService.ListaUsuarioP(Convert.ToInt32(ViewData["idProyecto"])))
+                            {
+                                <tr>
+                                    <td>
+                                        @if (item.UsuarioID == Context.Session.GetInt32("UserId"))
+                                        {
+                                            <p>Tu</p>
+                                        }
+                                        else
+                                        {
+                                            @NombreEmail(item.Usuario.Nombre, item.Usuario.CorreoElectronico)
+                                        }
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Rol.Nombre)
+                                    </td>
+                                    <td>
+                                        @if (Context.Session.GetInt32("UserId") != item.Usuario.Id && item.Rol.Nombre != "Admin")  
+                                        {
+                                            @if (_rolesService.RolUsuario(Context.Session.GetInt32("UserId")).Rol.Nombre == "CoAdmin" || _rolesService.RolUsuario(Context.Session.GetInt32("UserId")).Rol.Nombre == "Admin")
+                                            {
+                                                <a asp-action="Edit" class="btn btn-primary" asp-controller="UsuarioEnProyectos" asp-route-id="@item.ID">Edit</a>
+                                                <a asp-action="Delete" class="btn btn-danger" asp-controller="UsuarioEnProyectos" asp-route-id="@item.ID">Delete</a>
+
+                                            }
+                                            
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <a href="@Url.Action("Create" ,"UsuarioEnProyectos", new { id = ViewData["idProyecto"] })" class="btn text-white add-member-button">Add Team Member</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var toggleButtons = document.querySelectorAll('.toggle-comments');
+
+            toggleButtons.forEach(function (button) {
+                button.addEventListener('click', function () {
+                    var targetId = button.getAttribute('data-target');
+                    var targetElement = document.querySelector(targetId);
+                    var icon = button.querySelector('i');
+
+                    if (targetElement.style.display === 'none' || targetElement.style.display === '') {
+                        targetElement.style.display = 'block';
+                        icon.classList.remove('fa-angle-down');
+                        icon.classList.add('fa-angle-up');
+                    } else {
+                        targetElement.style.display = 'none';
+                        icon.classList.remove('fa-angle-up');
+                        icon.classList.add('fa-angle-down'); 
+                    }
+                });
+            });
+        });
+    </script>
+</body>

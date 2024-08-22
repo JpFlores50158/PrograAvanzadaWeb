@@ -1,0 +1,164 @@
+﻿@model GTPWeb.Models.Tarea
+
+@{
+    ViewData["Title"] = "Editar Tarea";
+}
+
+<style>
+    .form-section {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        width: 800px;
+        margin: auto;
+        margin-top: 50px;
+    }
+
+        .form-section h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .form-section p {
+            font-size: 1em;
+            margin-bottom: 20px;
+        }
+
+    .form-group {
+        margin-bottom: 20px;
+        text-align: left;
+    }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+
+    .btn-primary {
+        background-color: #333;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 1em;
+    }
+
+        .btn-primary:hover {
+            background-color: #555;
+        }
+
+    .btn-secondary {
+        background-color: #f8f9fa;
+        color: #333;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 1em;
+    }
+
+        .btn-secondary:hover {
+            background-color: #e2e6ea;
+        }
+</style>
+
+<body style="background-color: #eaeaea;">
+    <main>
+        <section class="form-section">
+            <h1>@ViewData["Title"]</h1>
+            <p>Complete el siguiente formulario para editar la tarea</p>
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                <input type="hidden" asp-for="ID" />
+
+                <div class="form-group">
+                    <label asp-for="Titulo" class="control-label">Título</label>
+                    <input asp-for="Titulo" class="form-control" placeholder="Ingrese el título de la tarea" required />
+                    <span asp-validation-for="Titulo" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Descripcion" class="control-label">Descripción</label>
+                    <textarea asp-for="Descripcion" class="form-control" placeholder="Ingrese una descripción de la tarea" rows="4" required></textarea>
+                    <span asp-validation-for="Descripcion" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="FechaVencimiento" class="control-label">Fecha de Vencimiento</label>
+                    <input asp-for="FechaVencimiento" type="date" class="form-control" required />
+                    <span asp-validation-for="FechaVencimiento" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Prioridad" class="control-label">Prioridad</label>
+                    <select asp-for="Prioridad" class="form-control">
+                        <option value="">Seleccione una prioridad</option>
+                        <option value="Bajo">Bajo</option>
+                        <option value="Medio">Medio</option>
+                        <option value="Alto">Alto</option>
+                        <option value="Muy Alto">Muy Alto</option>
+                    </select>
+                    <span asp-validation-for="Prioridad" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Estado" class="control-label">Estado</label>
+                   
+                    <select asp-for="Estado" class="form-control">
+                        <option value="">Seleccione un estado</option>
+                        <option value="Completada">Completada</option>
+                        <option value="Pendiente">Pendiente</option>
+                        <option value="En Proceso">En Proceso</option>
+                    </select>
+                    <span asp-validation-for="Estado" class="text-danger"></span>
+                </div>
+
+                <input type="hidden" asp-for="ProyectoID" class="form-control" />
+                <div class="form-group">
+                    <label asp-for="Categoria" class="control-label">Categoría</label>
+                    <select asp-for="Categoria" class="form-control">
+                        <option value="">Seleccione una categoría</option>
+                        <option value="Desarrollo">Desarrollo</option>
+                        <option value="Diseño">Diseño</option>
+                        <option value="Testing">Testing</option>
+                        <option value="Documentación">Documentación</option>
+                        <option value="Investigación">Investigación</option>
+                        <option value="Soporte">Soporte</option>
+                    </select>
+                    <span asp-validation-for="Categoria" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="UsuarioEnProyectoID" class="control-label">Usuario</label>
+                    <select asp-for="UsuarioEnProyectoID" class="form-control" asp-items="ViewBag.UsuarioEnProyectoID">
+                        <option value="">Seleccione un usuario</option>
+                    </select>
+                    <span asp-validation-for="UsuarioEnProyectoID" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Guardar" class="btn-primary" />
+                  
+                </div>
+            </form>
+        </section>
+    </main>
+</body>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

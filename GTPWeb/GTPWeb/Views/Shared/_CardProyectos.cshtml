@@ -1,0 +1,76 @@
+﻿@model Proyecto
+@inject GTPWeb.Services.IProyectoService _proyectoService
+@inject GTPWeb.Services.IRolesService _rolesService
+
+@{
+    var progreso = _proyectoService.CalcularProgresoProyecto(Model.ID);
+    var cantTareas = _proyectoService.CantidadTareasProyecto(Model.ID);
+}
+
+<div class="col-12  my-3">
+    <div class="card">
+        <div class="card-body">
+            <h3 class="card-title font-weight-bold mb-2">@Model.Nombre</h3>
+            <p class="card-text text-muted">@Model.Descripcion</p>
+
+            <div class="d-flex justify-content-between">
+                <div class="row">
+                    <div class="ml-3">
+                        @if (Model.FechaInicio.HasValue)
+                        {
+                            <p class=""><strong>Start:</strong> @Model.FechaInicio.Value.ToString("MMMM dd, yyyy")</p>
+                        }
+                    </div>
+                    <div class="mx-4">
+                        @if (Model.FechaFin.HasValue)
+                        {
+                            <p><strong>Due:</strong> @Model.FechaFin.Value.ToString("MMMM dd, yyyy")</p>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+                <p>Progreso: @progreso %</p> 
+                <p>Tareas por hacer: @cantTareas</p>
+            </div>
+            <div class="progress mb-1" style="height: 8px;">
+                
+                <div class="progress-bar bg-success" role="progressbar" style="width: @progreso%;" aria-valuenow="@progreso" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+
+            <div class="d-flex justify-content-end">
+                <a class="text-success" style="font-weight:100%" asp-action="Index" asp-controller="Tareas" asp-route-id="@Model.ID">View Details</a>
+                @if ( _rolesService.RolUsuario(Context.Session.GetInt32("UserId")).Rol.Nombre == "Admin")
+                {
+                    <a class="text-success mx-5" asp-action="Edit" asp-route-id="@Model.ID"><i class="fas fa-edit"></i></a>
+                    <a class="text-success" href="#" onclick="confirmDelete('@Model.ID')"><i class="fas fa-trash-alt"></i></a>
+                
+                }
+                @if (_rolesService.RolUsuario(Context.Session.GetInt32("UserId")).Rol.Nombre == "CoAdmin")
+                {
+                    <a class="text-success mx-5" asp-action="Edit" asp-route-id="@Model.ID"><i class="fas fa-edit"></i></a>
+                   
+
+                }
+                @if (_rolesService.RolUsuario(Context.Session.GetInt32("UserId")).Rol.Nombre == "CoAdmin" || _rolesService.RolUsuario(Context.Session.GetInt32("UserId")).Rol.Nombre == "Usuario")
+                {
+                    <a class="text-success mx-5" asp-action="DeleteUsuarioNoAdmin" asp-controller="UsuarioEnProyectos" asp-route-id='@Context.Session.GetInt32("UserId")'>Salir</a>
+
+
+                }
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    function confirmDelete(projectId) {
+        if (confirm('Seguro que quiere eliminar el proyecto?(se eliminaran todo lo relacionado con este proyecto).')) {
+            // Redirect to the delete action if confirmed
+            window.location.href = '@Url.Action("Delete", "Proyectos")/' + projectId;
+        }
+    }
+</script>

@@ -1,0 +1,124 @@
+﻿@model Dictionary<string, List<GTPWeb.Models.Tarea>>
+@inject GTPWeb.Services.IUsuariosPService _usuarioPService
+@{
+    var estados = new[] { "Pendiente", "En Proceso", "Completada" };
+    var proyectoId = ViewData["idProyecto"] as int?;
+}
+
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 mb-5">
+            <a asp-action="Index" asp-controller="Tareas" asp-route-id="@proyectoId" class="btn btn-secondary " style="width:100%">
+                Back to List
+            </a>
+            <hr/>
+        </div>
+        @foreach (var estado in estados)
+        {
+            <div class="col-md-4 mb-3">
+                <h3 class="text-center mb-3">@estado</h3>
+                <div class="border p-3 rounded bg-light kanban-tasks" data-status="@estado">
+                    <!-- Área de destino para tareas -->
+                    <div class="kanban-drop-area mb-3">
+                        <p style="display:flex;justify-content:center;align-items:center">Suelte aqui</p>
+                    </div>
+
+                    @if (Model.ContainsKey(estado))
+                    {
+                        foreach (var tarea in Model[estado])
+                        {
+                            <div class="kanban-task p-2 mb-2 border rounded bg-white" draggable="true" data-id="@tarea.ID">
+                                <h5 class="mb-1">@tarea.Titulo</h5>
+                                <p class="mb-1">@tarea.Descripcion</p>
+                                <p class="mb-0">Asignado a: @_usuarioPService.ListaUsuariosPUsuario(tarea.UsuarioEnProyecto.UsuarioID).Usuario.Nombre</p>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .kanban-tasks {
+        min-height: 300px; /* Asegura que haya un mínimo de altura para las tareas */
+        position: relative; /* Para que el área de destino se posicione correctamente */
+    }
+
+    .kanban-drop-area {
+        height: 30px; /* Ajusta la altura según el espacio que quieras dejar */
+        border: 2px dashed #ddd;
+        border-radius: 8px;
+        background-color: #f1f1f1;
+        margin-bottom: 10px;
+        position: relative; /* Para asegurar que esté debajo de las tareas arrastradas */
+        z-index: 0; /* Asegura que esté detrás de las tareas arrastradas */
+    }
+
+    .kanban-task {
+        cursor: grab;
+    }
+
+        .kanban-task:active {
+            cursor: grabbing;
+        }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var tasks = document.querySelectorAll('.kanban-task');
+        var columns = document.querySelectorAll('.kanban-tasks');
+
+        tasks.forEach(task => {
+            task.addEventListener('dragstart', handleDragStart);
+            task.addEventListener('dragend', handleDragEnd);
+        });
+
+        columns.forEach(column => {
+            column.addEventListener('dragover', handleDragOver);
+            column.addEventListener('drop', handleDrop);
+        });
+
+        function handleDragStart(event) {
+            event.dataTransfer.setData('text/plain', event.target.dataset.id);
+            event.target.style.opacity = '0.5'; // Opcional: cambia la opacidad para indicar que está siendo arrastrado
+        }
+
+        function handleDragEnd(event) {
+            event.target.style.opacity = ''; // Restaura la opacidad original
+        }
+
+        function handleDragOver(event) {
+            event.preventDefault(); // Permite el drop
+        }
+
+        function handleDrop(event) {
+            event.preventDefault();
+            var taskId = event.dataTransfer.getData('text/plain');
+            var taskElement = document.querySelector(`.kanban-task[data-id='${taskId}']`);
+            var newStatus = event.target.dataset.status;
+
+            if (taskElement) {
+                var oldColumn = taskElement.closest('.kanban-tasks');
+                var oldStatus = oldColumn.dataset.status;
+
+                if (oldStatus !== newStatus) {
+                    // Update task status in the database (via API or form submission)
+                    updateTaskStatus(taskId, newStatus);
+                }
+
+                // Move task element to new column
+                event.target.closest('.kanban-tasks').appendChild(taskElement);
+            }
+        }
+
+        function updateTaskStatus(taskId, newStatus) {
+            fetch(`/Tareas/EditKaban?id=${taskId}&newStatus=${encodeURIComponent(newStatus)}`, {
+                method: 'GET'  
+            });
+        }
+    });
+</script>
