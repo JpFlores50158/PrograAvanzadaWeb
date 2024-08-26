@@ -27,7 +27,7 @@ namespace GTPWeb.Controllers
             if (userId == null)
             {
                 
-                return RedirectToAction("IncioSesion", "Login");
+                return RedirectToAction("InicioSesion", "Login");
             }
             var proyectos = _context.Proyectos
           .Where(p => p.UsuariosEnProyectos.Any(up => up.UsuarioID == userId))

@@ -51,10 +51,17 @@
 
                         <button type="submit" class="btn btn-success w-100">Login</button>
                     </form>
-
-                    <a class="d-block text-center mt-3 btn btn-secondary" href="@Url.Action("Registro","Login")">Register</a>
+                    <div style="display:flex;justify-content:center;align-items:center;margin-top:10px">
+                        <p>No tiene cuenta?  <a class="text-reset" style="font-weight:500; text-decoration:underline" href="@Url.Action("Registro","Login")">Registrese!</a></p>
+                    </div>
+                   
                 </div>
             </div>
         </div>
     </div>
 </section>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

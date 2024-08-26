@@ -1,5 +1,5 @@
 ﻿@model GTPWeb.Models.Tarea
-
+@inject GTPWeb.Services.IUsuariosPService _usuarioPService
 @{
     ViewData["Title"] = "Delete";
 }
@@ -37,7 +37,9 @@
                 <dd class="col-sm-9">@Html.DisplayFor(model => model.Proyecto.Nombre)</dd>
 
                 <dt class="col-sm-3">Assigned User</dt>
-                <dd class="col-sm-9">@Html.DisplayFor(model => model.UsuarioEnProyecto.Usuario.Nombre)</dd>
+                <dd class="col-sm-9">
+                    <p> @_usuarioPService.ListaUsuariosPUsuario(@Model.UsuarioEnProyecto.UsuarioID).Usuario.Nombre</p>
+                </dd>
             </dl>
         </div>
         <div class="card-footer text-end">

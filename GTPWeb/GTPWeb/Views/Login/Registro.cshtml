@@ -46,8 +46,14 @@
                         <button type="submit" class="btn btn-success w-100">
                             Registrar
                         </button>
+
                     </form>
+                    <div style="display:flex;justify-content:center;align-items:center;margin-top:10px">
+                        <p>Ya tiene cuenta? <a class="text-reset" style="font-weight:500; text-decoration:underline"href="@Url.Action("InicioSesion","Login")">Inicio Sesion</a></p>
+                    </div>
+                   
                 </div>
+               
             </div>
 
             <div class="col-md-6 d-flex align-items-center justify-content-center shadow ">
@@ -56,3 +62,8 @@
         </div>
     </div>
 </section>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

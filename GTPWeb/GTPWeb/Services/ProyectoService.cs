@@ -1,4 +1,5 @@
 ﻿using GTPWeb.Models;
+using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
 using System.Text.Json;
@@ -67,6 +68,17 @@ namespace GTPWeb.Services
                 .Include(u => u.Usuario)
                 .Where(u => u.ProyectoID == proyectoId)
                 .ToListAsync();
+        }
+        public string NombreLider(int proyectoId) {
+
+            var nombre = _context.UsuariosEnProyectos
+              .Include(u => u.Proyecto)
+              .Include(u => u.Rol)
+            .Include(u => u.Usuario)
+              .Where(u => u.ProyectoID == proyectoId && u.Rol.Nombre == "Admin")
+              .FirstOrDefault();
+            
+            return nombre.Usuario.CorreoElectronico;
         }
 
 

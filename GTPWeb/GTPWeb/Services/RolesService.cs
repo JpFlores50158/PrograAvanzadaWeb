@@ -15,10 +15,20 @@ namespace GTPWeb.Services
             _context = context;
         }
 
-       
+
+        public List<UsuarioEnProyecto> RolUsuarioPorProyecto(int? ProyectoId, int? UsuarioId)
+{
+    return _context.UsuariosEnProyectos
+        .Include(u => u.Proyecto)
+                .Include(u => u.Rol)
+                .Include(u => u.Usuario)
+        .Where(u => u.UsuarioID == UsuarioId && u.ProyectoID == ProyectoId)
+        .ToList();
+}
+
         public UsuarioEnProyecto RolUsuario(int? UsuarioId)
         {
-            return  _context.UsuariosEnProyectos
+            return _context.UsuariosEnProyectos
                 .Include(u => u.Proyecto)
                 .Include(u => u.Rol)
                 .Include(u => u.Usuario)

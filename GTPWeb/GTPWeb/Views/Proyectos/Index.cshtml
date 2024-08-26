@@ -1,4 +1,6 @@
 ﻿@model IEnumerable<GTPWeb.Models.Proyecto>
+@inject GTPWeb.Services.IProyectoService _proyectoService
+@inject GTPWeb.Services.IRolesService _rolesService
 
 @{
     ViewData["Title"] = "Index";
@@ -102,11 +104,9 @@
     </style>
 </head>
 <body>
-
     <div class="container">
         <div class="header">
             <h2 class="text-2xl font-bold tracking-tighter">Mis Proyectos</h2>
-
             <a class="btn add-task" asp-action="Create">Create New</a>
         </div>
 
@@ -121,16 +121,77 @@
             <div class="row">
                 @foreach (var item in Model)
                 {
-                    <div class="col-md-12">
-                        @await Html.PartialAsync("_CardProyectos", item)
+                    var progreso = _proyectoService.CalcularProgresoProyecto(item.ID);
+                    var cantTareas = _proyectoService.CantidadTareasProyecto(item.ID);
+                    var usuarioRolesEnProyecto = _rolesService.RolUsuarioPorProyecto(item.ID, Context.Session.GetInt32("UserId").Value);
+
+                    <div class="col-12 my-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <div style="display:flex;justify-content:space-between;align-items:center;">
+                                    <h3 class="card-title font-weight-bold mb-2">@item.Nombre</h3>
+                                    <p class="mb-2">Creador: @_proyectoService.NombreLider(item.ID)</p>
+                                </div>
+                                <p class="card-text text-muted">@item.Descripcion</p>
+
+                                <div class="d-flex justify-content-between">
+                                    <div class="row">
+                                        <div class="ml-3">
+                                            @if (item.FechaInicio.HasValue)
+                                            {
+                                                <p><strong>Start:</strong> @item.FechaInicio.Value.ToString("MMMM dd, yyyy")</p>
+                                            }
+                                        </div>
+                                        <div class="mx-4">
+                                            @if (item.FechaFin.HasValue)
+                                            {
+                                                <p><strong>Due:</strong> @item.FechaFin.Value.ToString("MMMM dd, yyyy")</p>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div style="display:flex;justify-content:space-between;align-items:center;">
+                                    <p>Progreso: @progreso %</p>
+                                    <p>Tareas por hacer: @cantTareas</p>
+                                </div>
+                                <div class="progress mb-1" style="height: 8px;">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: @progreso%;" aria-valuenow="@progreso" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                                <div class="d-flex justify-content-end">
+                                    <a class="text-success" style="font-weight:100%" asp-action="Index" asp-controller="Tareas" asp-route-id="@item.ID">View Details</a>
+
+                                    @if (usuarioRolesEnProyecto.Any(r => r.Rol.Nombre == "Admin"))
+                                    {
+                                        <a class="text-success mx-5" asp-action="Edit" asp-route-id="@item.ID"><i class="fas fa-edit"></i></a>
+                                        <a class="text-success" href="#" onclick="confirmDelete('@item.ID')"><i class="fas fa-trash-alt"></i></a>
+                                    }
+
+                                    @if (usuarioRolesEnProyecto.Any(r => r.Rol.Nombre == "CoAdmin"))
+                                    {
+                                        <a class="text-success mx-5" asp-action="Edit" asp-route-id="@item.ID"><i class="fas fa-edit"></i></a>
+                                    }
+
+                                    @if (usuarioRolesEnProyecto.Any(r => r.Rol.Nombre == "CoAdmin") || usuarioRolesEnProyecto.Any(r => r.Rol.Nombre == "Usuario"))
+                                    {
+                                        <a class="text-success mx-5" asp-action="DeleteUsuarioNoAdmin" asp-controller="UsuarioEnProyectos" asp-route-id='@Context.Session.GetInt32("UserId")'>Salir</a>
+                                    }
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
+                    <script>
+                        function confirmDelete(projectId) {
+                            if (confirm('Seguro que quiere eliminar el proyecto?(se eliminaran todo lo relacionado con este proyecto).')) {
+                                window.location.href = '@Url.Action("Delete", "Proyectos")/' + projectId;
+                            }
+                        }
+                    </script>
                 }
             </div>
-           
-
         }
-
     </div>
-
 </body>
 </html>

@@ -145,118 +145,132 @@
                         </div>
                         
                     </div>
-                    
-                    @foreach (var tarea in Model)
+
+                    @if (Model == null || !Model.Any())
                     {
-                        <div class="card my-2">
-                            <div class="card-header">
-                                @{
-                                    var prioridadClass = tarea.Prioridad switch
-                                    {
-                                        "Bajo" => "task-priority-bajo",
-                                        "Medio" => "task-priority-medio",
-                                        "Alto" => "task-priority-alto",
-                                        "Muy Alto" => "task-priority-muyalto",
-                                        _ => "task-priority-bajo"
-                                    };
-                                }
-                                <div class="row">
-                                    <div class="col-7">
-                                        <h5>@tarea.Titulo</h5>
-                                    </div>
-                                    <div class="col-5"style="display:flex;justify-content:end">
-                                         <span class="categoria-tipo"> @tarea.Categoria</span>
-                                        <span class="@prioridadClass "> @tarea.Prioridad</span>
-                                    </div>
-                                </div>
-                               
-                            </div>
-                            <div class="card-body p-2">
-                                <div class="row">
-                                    <div class="col-9 ">
-                                       
-                                        <p>@tarea.Descripcion</p>
-                                        <p class="m-0">Aisgnado a: @_usuarioPService.ListaUsuariosPUsuario(tarea.UsuarioEnProyecto.UsuarioID).Usuario.Nombre</p>
-                                    </div>
-                                    <div class="col-3 align-content-center justify-content-center">
-                                        <span class="status @(tarea.Estado.ToLower().Replace(" ", "-"))">
-                                            @tarea.Estado
-                                        </span>
-                                       <div style="display:flex;justify-content:space-between" class="mt-1">
-                                            @if (_rolesService.RolUsuario(Context.Session.GetInt32("UserId")).Rol.Nombre == "CoAdmin" || _rolesService.RolUsuario(Context.Session.GetInt32("UserId")).Rol.Nombre == "Admin")
-                                            {
-                                                <a href="@Url.Action("Edit", new { id = tarea.ID })" class=" text-primary "><i class="fas fa-edit"></i></a>
-
-                                                <a href="@Url.Action("Delete", new { id = tarea.ID })" class=" text-danger "><i class="fas fa-trash"></i></a>
-
-                                            }
-                                            <a href="@Url.Action("Details", new { id = tarea.ID })" class=" text-secondary  "><i class="fas fa-info"></i></a>
-                                       </div>
-                                    </div>
-
-                                   
-                                </div>
-                                <hr />
-                                <div style="display: flex; justify-content: space-between; align-content: end;" class="">
-                                    
-                                    <div class="due-date" style="justify-content:start">
-                                        @if (tarea.FechaVencimiento.HasValue)
-                                        {
-                                            <span>@tarea.FechaVencimiento.Value.ToString("MMMM dd, yyyy")</span>
-                                        }
-                                        else
-                                        {
-                                            <span>No Due Date</span>
-                                        }
-                                    </div>
-                                    <div>
-                                        <a class="text-success" style="font-weight: 100%" asp-action="Create" asp-controller="Comentarios" asp-route-id="@tarea.ID">
-                                            <i class="fas fa-comment"></i>
-                                        </a>
-                                        @if (_comentarioService.ListaComentarios(tarea.ID).Count() != 0)
-
-                                        {
-                                            <a class="text-success ml-2 toggle-comments" style="font-weight: 100%" data-target="#comments-@tarea.ID">
-                                                <i class="fas fa-angle-down"></i>
-                                            </a>
-                                        }
-                                    </div>
-                                   
-                                </div>
-                            </div>
+                        <div class="text-center mt-4"style="font-size:20px">
+                            <p>No tienes tareas.</p>
                         </div>
-                        <div id="comments-@tarea.ID" class="ml-5 mr-3 mb-2" style="display: none;">
-                            @foreach (var comentario in _comentarioService.ListaComentarios(tarea.ID))
-                            {
-                                <div class="card" style="background-color: #f3f3f3;">
-                                    <div class="card-body pb-1">
-                                        <div class="row">
-                                            <div class="col-11">
-                                                <h5>@comentario.Usuario.Nombre:</h5>
-                                                <p class="card-text pl-4 rounded" >@comentario.Mensaje</p>
-                                                <span style="font-size: 12px; display: flex; justify-content: end; align-items: end;" class="text-muted">@comentario.FechaCreacion</span>
-                                            </div>
-                                            <div class="col-1" style="display: flex; justify-content: center; flex-wrap: wrap; align-items: center;">
+                    }
+                    else
+                    {
 
-                                                @if (_rolesService.RolUsuario(Context.Session.GetInt32("UserId")).Rol.Nombre == "CoAdmin" || _rolesService.RolUsuario(Context.Session.GetInt32("UserId")).Rol.Nombre == "Admin" || comentario.Usuario.Id == Context.Session.GetInt32("UserId"))
+                        @foreach (var tarea in Model)
+                        {
+                            <div class="card my-2">
+                                <div class="card-header">
+                                    @{
+                                        var prioridadClass = tarea.Prioridad switch
+                                        {
+                                            "Bajo" => "task-priority-bajo",
+                                            "Medio" => "task-priority-medio",
+                                            "Alto" => "task-priority-alto",
+                                            "Muy Alto" => "task-priority-muyalto",
+                                            _ => "task-priority-bajo"
+                                        };
+                                    }
+                                    <div class="row">
+                                        <div class="col-7">
+                                            <h5>@tarea.Titulo</h5>
+                                        </div>
+                                        <div class="col-5" style="display:flex;justify-content:end">
+                                            <span class="categoria-tipo"> @tarea.Categoria</span>
+                                            <span class="@prioridadClass "> @tarea.Prioridad</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="card-body p-2">
+                                    <div class="row">
+                                        <div class="col-9 ">
+
+                                            <p>@tarea.Descripcion</p>
+                                            <p class="m-0">Aisgnado a: @_usuarioPService.ListaUsuariosPUsuario(tarea.UsuarioEnProyecto.UsuarioID).Usuario.Nombre</p>
+                                        </div>
+                                        <div class="col-3 align-content-center justify-content-center">
+                                            <span class="status @(tarea.Estado.ToLower().Replace(" ", "-"))">
+                                                @tarea.Estado
+                                            </span>
+                                            <div style="display:flex;justify-content:space-between" class="mt-1">
+                                                @if (_rolesService.RolUsuario(Context.Session.GetInt32("UserId")).Rol.Nombre == "CoAdmin" || _rolesService.RolUsuario(Context.Session.GetInt32("UserId")).Rol.Nombre == "Admin")
                                                 {
-                                                    <a asp-action="Edit" class="text-primary" asp-controller="Comentarios" asp-route-id="@comentario.ID">
-                                                        <i class="fas fa-edit"></i>
-                                                    </a>
-                                                    <a asp-action="Delete" class="text-danger mt-1" asp-controller="Comentarios" asp-route-id="@comentario.ID">
-                                                        <i class="fas fa-trash"></i>
-                                                    </a>
+                                                    <a href="@Url.Action("Edit", new { id = tarea.ID })" class=" text-primary "><i class="fas fa-edit"></i></a>
+
+                                                    <a href="@Url.Action("Delete", new { id = tarea.ID })" class=" text-danger "><i class="fas fa-trash"></i></a>
 
                                                 }
-                                               
+                                                <a href="@Url.Action("Details", new { id = tarea.ID })" class=" text-secondary  "><i class="fas fa-info"></i></a>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                    <hr />
+                                    <div style="display: flex; justify-content: space-between; align-content: end;" class="">
+
+                                        <div class="due-date" style="justify-content:start">
+                                            @if (tarea.FechaVencimiento.HasValue)
+                                            {
+                                                <span>@tarea.FechaVencimiento.Value.ToString("MMMM dd, yyyy")</span>
+                                            }
+                                            else
+                                            {
+                                                <span>No Due Date</span>
+                                            }
+                                        </div>
+                                        <div>
+                                            <a class="text-success" style="font-weight: 100%" asp-action="Create" asp-controller="Comentarios" asp-route-id="@tarea.ID">
+                                                <i class="fas fa-comment"></i>
+                                            </a>
+                                            @if (_comentarioService.ListaComentarios(tarea.ID).Count() != 0)
+
+                                            {
+                                                <a class="text-success ml-2 toggle-comments" style="font-weight: 100%" data-target="#comments-@tarea.ID">
+                                                    <i class="fas fa-angle-down"></i>
+                                                </a>
+                                            }
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="comments-@tarea.ID" class="ml-5 mr-3 mb-2" style="display: none;">
+                                @foreach (var comentario in _comentarioService.ListaComentarios(tarea.ID))
+                                {
+                                    <div class="card" style="background-color: #f3f3f3;">
+                                        <div class="card-body pb-1">
+                                            <div class="row">
+                                                <div class="col-11">
+                                                    <h5>@comentario.Usuario.Nombre:</h5>
+                                                    <p class="card-text pl-4 rounded">@comentario.Mensaje</p>
+                                                    <span style="font-size: 12px; display: flex; justify-content: end; align-items: end;" class="text-muted">@comentario.FechaCreacion</span>
+                                                </div>
+                                                <div class="col-1" style="display: flex; justify-content: center; flex-wrap: wrap; align-items: center;">
+
+                                                    @if (_rolesService.RolUsuario(Context.Session.GetInt32("UserId")).Rol.Nombre == "CoAdmin" || _rolesService.RolUsuario(Context.Session.GetInt32("UserId")).Rol.Nombre == "Admin" || comentario.Usuario.Id == Context.Session.GetInt32("UserId"))
+                                                    {
+                                                        <a asp-action="Edit" class="text-primary" asp-controller="Comentarios" asp-route-id="@comentario.ID">
+                                                            <i class="fas fa-edit"></i>
+                                                        </a>
+                                                        <a asp-action="Delete" class="text-danger mt-1" asp-controller="Comentarios" asp-route-id="@comentario.ID">
+                                                            <i class="fas fa-trash"></i>
+                                                        </a>
+
+                                                    }
+
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            }
-                        </div>
+                                }
+                            </div>
+                        }
+
                     }
+                        
                   
+                    
+
                 </div>
 
                 <!-- Team Members Section -->
