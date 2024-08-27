@@ -219,32 +219,49 @@ namespace GTPWeb.Controllers
 
 
 
-        [HttpGet]
-        public async Task<IActionResult> DeleteUsuarioNoAdmin(int id)
+        public async Task<IActionResult> DeleteUsuarioNoAdmin(int proyectoId, int id)
         {
-            // Encuentra el UsuarioEnProyecto
-            var usuarioEnProyecto = _context.UsuariosEnProyectos
+            // Retrieve the UsuarioEnProyecto entity for the given user and project
+            var usuarioEnProyecto = await _context.UsuariosEnProyectos
+                .Where(up => up.UsuarioID == id && up.ProyectoID == proyectoId)
                 .Include(up => up.Tareas)
-                .Where(up => up.UsuarioID == id)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             if (usuarioEnProyecto != null)
             {
-                // 1. Eliminar las Tareas relacionadas con el UsuarioEnProyecto (opcional)
-                var tareas = _context.Tareas
-                    .Where(t => t.UsuarioEnProyectoID == id)
-                    .ToList();
+                // Remove related Tareas and their comments if necessary
+                if (usuarioEnProyecto.Tareas != null && usuarioEnProyecto.Tareas.Any())
+                {
+                    foreach (var tarea in usuarioEnProyecto.Tareas)
+                    {
+                        // Remove related comments for each Tarea
+                        var comentarios = _context.Comentarios
+                            .Where(c => c.TareaID == tarea.ID)
+                            .ToList();
+                        _context.Comentarios.RemoveRange(comentarios);
 
-                _context.Tareas.RemoveRange(tareas);
+                        // Remove the Tarea
+                        _context.Tareas.Remove(tarea);
+                    }
+                }
 
-                // 2. Eliminar el UsuarioEnProyecto
+                // Remove the UsuarioEnProyecto
                 _context.UsuariosEnProyectos.Remove(usuarioEnProyecto);
 
-                // Guardar los cambios en la base de datos
-                _context.SaveChanges();
+                // Save changes to the database
+                await _context.SaveChangesAsync();
             }
+            else
+            {
+                // Handle case where UsuarioEnProyecto does not exist
+                TempData["ErrorMessage"] = "El usuario no está asociado al proyecto o ya fue eliminado.";
+            }
+
+            // Redirect to the appropriate action, you might want to pass `proyectoId` as well
             return RedirectToAction("Index", "PaginaPrincipal");
         }
+
+
 
         private bool UsuarioEnProyectoExists(int id)
         {

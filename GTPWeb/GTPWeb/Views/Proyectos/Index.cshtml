@@ -149,12 +149,12 @@
                                             }
                                         </div>
                                     </div>
+                                    <div style="display:flex;justify-content:end;align-items:center;">
+
+                                        <p>Tareas por hacer: @cantTareas</p>
+                                    </div>
                                 </div>
 
-                                <div style="display:flex;justify-content:space-between;align-items:center;">
-                                    <p>Progreso: @progreso %</p>
-                                    <p>Tareas por hacer: @cantTareas</p>
-                                </div>
                                 <div class="progress mb-1" style="height: 8px;">
                                     <div class="progress-bar bg-success" role="progressbar" style="width: @progreso%;" aria-valuenow="@progreso" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
@@ -175,7 +175,7 @@
 
                                     @if (usuarioRolesEnProyecto.Any(r => r.Rol.Nombre == "CoAdmin") || usuarioRolesEnProyecto.Any(r => r.Rol.Nombre == "Usuario"))
                                     {
-                                        <a class="text-success mx-5" asp-action="DeleteUsuarioNoAdmin" asp-controller="UsuarioEnProyectos" asp-route-id='@Context.Session.GetInt32("UserId")'>Salir</a>
+                                        <a class="text-success mx-5" asp-action="DeleteUsuarioNoAdmin" asp-controller="UsuarioEnProyectos" asp-route-proyectoId="@item.ID" asp-route-id='@Context.Session.GetInt32("UserId")'>Salir</a>
                                     }
                                 </div>
                             </div>

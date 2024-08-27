@@ -77,8 +77,11 @@ namespace GTPWeb.Services
             .Include(u => u.Usuario)
               .Where(u => u.ProyectoID == proyectoId && u.Rol.Nombre == "Admin")
               .FirstOrDefault();
-            
-            return nombre.Usuario.CorreoElectronico;
+            var nombreFinal = "";
+            if (nombre != null) {
+               nombreFinal= nombre.Usuario.CorreoElectronico;
+            }
+            return nombreFinal; 
         }
 
 
